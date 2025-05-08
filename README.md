@@ -32,6 +32,10 @@ Initially Gemini could not suggest a fix, so I checked with ChatGPT, which initi
   };
 ```
 
+### Expectations that Blockly would detect async JS code inside user-defined functions
+
+Gemini explicitly expressed its reliance on the ability of Blockly to make the JS code for user-defined functions blocks be using async functions. But this does not seem to be the case with the version of Blockly used. Another prompt was needed to ask Gemini to generate code, which can handle that.
+
 ## Follow up question to Gemini
 
 Finally, asked Gemini the following question: "given this game, is it possible to write a program for the robot, which guarantees that the final goal cell will always be reached regardless of the board?"
@@ -87,7 +91,3 @@ To guarantee reaching the goal on *any* solvable board, the robot (or its progra
 *   Potentially, a way to **backtrack** systematically.
 
 The current set of Blockly blocks provides a good introduction to basic robot control and sequential logic, but it's not powerful enough for universal maze-solving algorithms. It's more about the user devising a specific plan for a given (or simple type of) maze.
-
-### Expectations that Blockly would detect async JS code inside user-defined functions
-
-Gemini explicitly expressed its reliance on the ability of Blockly to make the JS code for user-defined functions blocks be using async functions. But this does not seem to be the case with the version of Blockly used. Another prompt was needed to ask Gemini to generate code, which can handle that.
