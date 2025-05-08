@@ -42,52 +42,64 @@ Finally, asked Gemini the following question: "given this game, is it possible t
 
 Its answer goes like that:
 
-No, it is **not possible** to write a single, fixed Blockly program that guarantees the robot will *always* reach the goal cell regardless of the randomly generated board, given the current set of commands and sensors.
+Even with the addition of functions, variables, conditional logic (if/else), and loops, the answer is still fundamentally no, it is not possible to write a single, fixed Blockly program that guarantees the robot will always reach the goal cell regardless of the randomly generated board, given the current set of commands and sensors.
 
-Here's why:
+Here's why the limitations persist, even with these new programming constructs:
 
-1.  **Lack of Global Pathfinding/Memory:**
-    *   The robot's commands (`move_forward`, `turn_left`, `turn_right`) are purely local.
-    *   The sensors (`is_wall_ahead`, `is_on_goal`) are also local, only providing information about the immediate environment or current state.
-    *   The robot has no way to "see" the entire map, store a map, or remember complex paths it has tried.
+Lack of True Maze-Solving Primitives / Global State Awareness:
 
-2.  **The Nature of Mazes:**
-    *   Randomly generated mazes can have many dead ends, loops, and complex structures.
-    *   Without a more sophisticated pathfinding algorithm (like A\*, Dijkstra's, or even a simple wall-follower with memory to avoid infinite loops in certain maze types), the robot can easily get stuck.
+No Memory of Visited Cells: The core problem remains. The robot cannot inherently remember "I've been to cell (x,y) before." Variables can store simple counts or flags, but not a complex 2D map of visited locations.
 
-3.  **Limitations of Simple Loop Structures:**
-    *   **`for` loop:** Executes a fixed number of times, which is not adaptable to varying maze sizes or path lengths.
-    *   **`while (is_wall_ahead)` / `while not (is_wall_ahead)`:** Useful for navigating along corridors or around simple obstacles, but can lead to infinite loops if the robot enters a concave area or a specific type of loop without additional logic.
-    *   **`while not (is_on_goal)`:** This is the most promising for a general solution, but the actions *inside* this loop need to be intelligent enough to explore effectively.
+No Backtracking Mechanism: While functions can structure code, there's no built-in Blockly mechanism (or simple way to construct one with current blocks) for true, systematic backtracking like in Depth-First Search (DFS). A DFS would require a stack to keep track of paths and the ability to "undo" moves when a dead end is hit and all options from a junction are exhausted.
 
-**What kind of algorithms *could* solve any maze (but are not implementable with current blocks)?**
+No Global Map View: The robot still only perceives its immediate surroundings (wall ahead, water ahead, on goal). It cannot "see" the entire maze layout to plan an optimal (or even any) path from a global perspective.
 
-*   **Wall Follower (Right-Hand or Left-Hand Rule):** This simple algorithm can solve *simply connected* mazes (mazes where all walls are connected, or equivalently, where the goal is reachable by always keeping one hand on a wall). However, it can fail in mazes with detached wall sections or islands if the start/goal are on different "islands" relative to the wall being followed. It also often takes a very long path.
-    *   *Blockly limitation:* Implementing a robust wall-follower that can also detect it's back at the start or in an infinite loop is tricky without more state or advanced logic blocks.
+Complexity of Arbitrary Mazes:
 
-*   **Random Mouse Algorithm:** The robot moves randomly until it finds the goal. Inefficient but will eventually find it if a path exists and the maze is finite.
-    *   *Blockly limitation:* No "move random direction" block, and even if there were, it's highly inefficient.
+Randomly generated mazes can be arbitrarily complex, featuring long winding paths, large empty areas that look like traps (but aren't), islands, and sophisticated dead ends.
 
-*   **Pledge Algorithm:** An improvement on the wall follower that can escape some traps.
-    *   *Blockly limitation:* Requires keeping track of net turns, which is beyond the current sensors.
+Simple strategies (even those using variables and functions) will eventually be defeated by a sufficiently complex maze structure if they don't incorporate a robust maze-solving algorithm's principles.
 
-*   **Trémaux's Algorithm / Depth-First Search (DFS) with Marking:** This is a guaranteed method. It involves marking paths as visited (e.g., drawing a line on the floor). When at a junction, it tries an unmarked path. If all paths are marked, it backtracks.
-    *   *Blockly limitation:* No way to "mark" cells as visited or to systematically backtrack based on such markings.
+What can users do with variables and functions?
 
-*   **Breadth-First Search (BFS) / A\*:** These algorithms explore the maze layer by layer or by a heuristic, keeping track of visited nodes and paths. They are guaranteed to find the shortest path if one exists.
-    *   *Blockly limitation:* Requires data structures (queues, priority queues) and memory of the grid, which are not available.
+Implement More Sophisticated Local Strategies:
 
-**What kind of programs *can* be built with the current blocks?**
+Use a variable to count steps and change behavior after a certain number (e.g., "try going straight for 5 steps, then try turning").
 
-*   Programs that solve specific, known board layouts.
-*   Programs that use simple strategies like "try to go forward, if wall turn right" which might work on very open mazes but will fail on complex ones.
-*   Programs that attempt a limited form of wall-following (e.g., "while not on goal: if not wall ahead move, else turn right"). This will get stuck in many common maze patterns.
+Use a flag variable to remember a recent state (e.g., "was the last turn a right turn?").
 
-**Conclusion:**
+Create functions for common sequences like "check_all_directions_and_move_if_clear" or "navigate_around_obstacle."
 
-To guarantee reaching the goal on *any* solvable board, the robot (or its programming environment) would need:
-*   The ability to **remember** visited cells or paths.
-*   More sophisticated **decision-making logic** than simple conditional checks based on immediate surroundings.
-*   Potentially, a way to **backtrack** systematically.
+Attempt Basic Wall Following (with limitations):
 
-The current set of Blockly blocks provides a good introduction to basic robot control and sequential logic, but it's not powerful enough for universal maze-solving algorithms. It's more about the user devising a specific plan for a given (or simple type of) maze.
+Users can try to implement a basic wall-following algorithm (e.g., "always keep a wall to your right"). Functions can help structure this.
+
+However, simple wall followers can get stuck in certain types of mazes (e.g., those with detached "islands" where the start and goal are on different sides of a loop that the wall follower gets trapped in). Variables might help detect some simple loops (e.g., if back at start facing same direction after N steps), but not all.
+
+Improve Code Readability and Reusability: This is a major benefit, but doesn't inherently grant maze-solving superpowers.
+
+Why True Maze-Solving Algorithms are Hard with Current Blocks:
+
+Consider Trémaux's algorithm, a human-usable maze-solving method that guarantees a solution:
+
+Mark every path you take (e.g., once when entering, twice when exiting).
+
+At a junction, never take a path marked twice.
+
+If you hit a dead end or a junction where all paths are marked twice, turn around and go back the way you came (marking it twice as you exit).
+
+If at a junction with an unmarked path, take it (marking it once).
+
+If at a junction with paths marked once, take one of those (marking it twice).
+
+Blockly limitations for Trémaux's:
+
+Marking Paths: How does the robot "mark" a cell or path in the currentGrid? The robotAPI doesn't allow modifying the grid. Even if it did, users can't directly access/modify a 2D array from Blockly.
+
+Storing Path History for Backtracking: How does it remember the exact path taken to systematically backtrack? Variables are insufficient for this complex state.
+
+Conclusion:
+
+While variables and functions make the programming environment much more powerful and allow for more complex user-devised strategies, they don't provide the fundamental building blocks for a general-purpose maze-solving algorithm that can handle any arbitrary, solvable maze generated by your system.
+
+The robot still operates on local information without a persistent, comprehensive memory of the maze structure or a built-in way to implement algorithms like DFS or BFS that require such memory. Users can write clever programs that solve many types of mazes, but a universal solver is out of reach with the current blockset.
