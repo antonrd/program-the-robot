@@ -1,5 +1,9 @@
 # Program a robot using Blockly to build the program
 
+Demo: https://antonrd.github.io/program-the-robot/
+
+For some time I had this idea to create a simple HTML page for young people learning to code. The page would allow them ot use Blockly blocks to construct a program, which is used to control a robot moving on a fields of square cells. It has always been a very low priority project and I never found the time for it. But nowadays when AI models can generate the code for such projects, I decided to give it a go. With a few iterations, the code that does something meaningful was ready. This required no coding on my side, just prompting AI models, looking for solutions to errors and reading the model explanations.
+
 Used Google AI Studio with Gemini 2.5 Pro Preview 05-06 to generate the source code for a spec that is described in the spec.txt file. It also contains follow-up requirements and a few comments about what happened while iterating on the code with Gemini.
 
 ## Issues while generating the code
@@ -21,7 +25,7 @@ Initially Gemini could not suggest a fix, so I checked with ChatGPT, which initi
 ```js
   javascriptGenerator = Blockly.JavaScript;
 
-  # Other code may be found here...
+  // Other code may be found here...
 
   javascriptGenerator.forBlock['robot_move_forward'] = function(block) {
     return 'await robotAPI.moveForward();\n';
