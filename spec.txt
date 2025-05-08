@@ -1,0 +1,55 @@
+Build a single HTML page, which uses the blockly javascript library to visualize a scratch-like coding environment. The environment is used by the user to build a movement plan for a small robot. The robot can execute a few commands:
+
+* turn right
+* turn left
+* move forward one step
+
+The robot is moving on rectangular 2D field. The field is constructed of square cells. At each given moment the robot is in one particular cell. Some cells are free to occupy by the robot and others are not accessible because they are walls. The goal of each program is to take the robot from its starting position to a specified final position.
+
+Split the page in two panels, one is used to build the program for the robot using blockly visualizations. The other panel visualized the 2D field and the robot. The page will contain controls, which allow the user to execute the program they have build with blockly. These controls are: 1) play button, 2) pause button, 3) reset button, which moves the robot to its original position.
+
+If the robot reaches the final position successfully when executing the user program, the UI will display a contratulatory message. If the program did not achieve this goal, the UI will display a corresponding message and show the current postion of the robot. The user would need to press the reset button to be able to start the program anew.
+
+The programming blocks that are avaiable to the user are as follows:
+* turn right command
+* turn left command
+* move forward one step command
+* for loop with a specified number of steps
+* while look, which can check whether the robot is facing a wall
+
+Do not import any other library besides blockly and standard APIs. Import blockly from a CDN location. The docs for blockly are located here: https://developers.google.com/blockly/guides/get-started/what-is-blockly
+
+To add blockly to the HTML file you can use the following lines of code:
+
+<!-- Load Blockly core -->
+<script src="https://unpkg.com/blockly/blockly_compressed.js"></script>
+<!-- Load the default blocks -->
+<script src="https://unpkg.com/blockly/blocks_compressed.js"></script>
+<!-- Load a generator -->
+<script src="https://unpkg.com/blockly/javascript_compressed.js"></script>
+<!-- Load a message file -->
+<script src="https://unpkg.com/blockly/msg/en.js"></script>
+
+# EDIT1: requirement added: can you modify this code to generate a random board each time. add a button, which allows to re-generate a new random board if the user wants to
+
+# EDIT2: requirement added: can you add one more sensor, which indicates if the robot is currently on the target cell on the board?
+
+# EDIT3: requirement added: can you add a few more features to this as follows:
+
+add a new type of cell, which is a water cell, the robot can swim through it
+
+add a new kind of movement command, which is swim forward one cell and can only be used to swim through water cells
+
+add a new sensor, which check if the cell ahead of the robot is a water cell
+
+# EDIT4: requirement added: Is it possible to add if conditions, too, so that the robot can be controlled to make a certain move if the condition is fulfilled?
+
+# EDIT5: requirement added: is it possible to also combine sensors with AND and OR, for example to check whether the robot is in front of a wall OR a water cell?
+
+# EDIT6: requirement added: can you also add the ability to write functions, so that the user can reuse code in their programs?
+
+This time there was an issue that the code generated for the functions would not make them async but they call async functions. Gemini explained beforehand that it expects Blockly to handle that but it looks like it does not. So, another iteration was needed, so that the code Gemini generated adds the async keyword to the code for the user-defined functions, so that things work.
+
+# EDIT7: questions: the functions that blockly allows to define can have parameters, but I am not sure if they can be used in the blocks inside the function block. Do we need to introduce variables for this?
+
+# EDIT8: requirement added: We do not currently have a variables group. Can you add one and keep the necessary changes you just did to address the issues with the async calls?
