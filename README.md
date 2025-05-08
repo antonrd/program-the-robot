@@ -6,6 +6,14 @@ For some time I had this idea to create a simple HTML page for young people lear
 
 Used Google AI Studio with Gemini 2.5 Pro Preview 05-06 to generate the source code for a spec that is described in the spec.txt file. It also contains follow-up requirements and a few comments about what happened while iterating on the code with Gemini.
 
+# How it looks
+
+To give a basic idea of how the UI can be used below are two screenshots of programs constructed using Blockly blocks.
+
+![Using functions](./images/scr1.png "Using functions")
+
+![Nested loops](./images/scr2.png "Nested loops")
+
 ## Issues while generating the code
 
 ### Old Blockly library API expectations
